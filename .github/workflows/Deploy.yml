@@ -33,6 +33,8 @@ jobs:
         key: ${{ secrets.AWS_PRIVATE_KEY }}
         port: 22
         script: |
-          docker rm -f compro_21 || true
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/compro_21:latest
-          docker run -d --name compro_21 -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/compro_21:latest
+          docker stop compro_21 || true
+          docker rm compro_21 || true
+          docker system prune -af || true
+          docker pull kh4erulll/compro_21:latest
+          docker run -d --name compro_21 -p 80:80 kh4erulll/compro_21:latest
