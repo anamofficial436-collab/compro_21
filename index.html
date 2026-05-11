@@ -1,10 +1,810 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Company Profile</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anam-Gaming | Digital Technology Solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --cyan:#00F5FF;--cyan2:#00C8D4;--pink:#FF2D78;--pink2:#C4003D;
+      --yellow:#FFE033;--green:#00FF9C;
+      --bg:#030712;--bg2:#060E1F;--bg3:#0A1628;
+      --panel:rgba(0,245,255,0.04);--border:rgba(0,245,255,0.15);--border2:rgba(255,45,120,0.2);
+      --text:#C8E8FF;--muted:#5B7FA0;
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-weight:400;overflow-x:hidden;cursor:none;}
+    body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);pointer-events:none;z-index:9000;}
+
+    /* CURSOR */
+    #cur{position:fixed;width:8px;height:8px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 12px var(--cyan),0 0 24px var(--cyan);}
+    #cur2{position:fixed;width:32px;height:32px;border:1px solid var(--cyan);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s;opacity:.5;}
+    #cur2.big{width:56px;height:56px;opacity:.9;border-color:var(--pink);}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:800;display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;background:rgba(3,7,18,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);animation:slideDown .8s ease both;}
+    @keyframes slideDown{from{opacity:0;transform:translateY(-100%)}to{opacity:1;transform:translateY(0)}}
+    .nav-logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.3rem;letter-spacing:.08em;text-decoration:none;display:flex;align-items:center;gap:10px;cursor:none;}
+    .logo-box{width:36px;height:36px;border:2px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--cyan);animation:logoPulse 3s infinite;}
+    @keyframes logoPulse{0%,100%{box-shadow:0 0 10px rgba(0,245,255,.4)}50%{box-shadow:0 0 22px rgba(0,245,255,.8)}}
+    .nav-links{display:flex;gap:36px;list-style:none;}
+    .nav-links a{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;cursor:none;transition:color .3s;position:relative;}
+    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--cyan);transform:scaleX(0);transition:transform .3s;transform-origin:left;}
+    .nav-links a:hover{color:var(--cyan);}
+    .nav-links a:hover::after{transform:scaleX(1);}
+    .nav-btn{font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--bg);background:var(--cyan);padding:10px 24px;text-decoration:none;cursor:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:background .3s,box-shadow .3s;}
+    .nav-btn:hover{background:var(--cyan2);box-shadow:0 0 20px rgba(0,245,255,.5);}
+
+    /* HERO */
+    .hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:100px 60px 60px;}
+    .hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(0,245,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.04) 1px,transparent 1px);background-size:60px 60px;animation:gridMove 20s linear infinite;}
+    @keyframes gridMove{from{transform:translateY(0)}to{transform:translateY(60px)}}
+    .hero-glow1{position:absolute;top:-200px;right:-100px;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,245,255,.07) 0%,transparent 70%);pointer-events:none;}
+    .hero-glow2{position:absolute;bottom:-200px;left:-100px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(255,45,120,.07) 0%,transparent 70%);pointer-events:none;}
+    .hero-content{position:relative;z-index:2;max-width:720px;}
+    .hero-badge{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border);padding:6px 16px;margin-bottom:32px;animation:fadeUp .8s .2s ease both;}
+    .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+    .badge-text{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--green);letter-spacing:.2em;}
+    .hero-title{font-family:'Orbitron',monospace;font-weight:900;font-size:clamp(2.8rem,6vw,5.5rem);line-height:1.05;letter-spacing:.03em;margin-bottom:8px;animation:fadeUp .8s .4s ease both;}
+    .t-white{display:block;color:#fff;}
+    .t-cyan{display:block;background:linear-gradient(90deg,var(--cyan),var(--cyan2),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 24px rgba(0,245,255,.4));}
+    .t-outline{display:block;-webkit-text-stroke:2px rgba(0,245,255,.35);color:transparent;font-size:.78em;}
+    .hero-sub{font-size:1.05rem;font-weight:300;line-height:1.85;color:var(--muted);max-width:560px;margin:28px 0 44px;animation:fadeUp .8s .6s ease both;}
+    .hero-sub span{color:var(--cyan);font-weight:500;}
+    .hero-btns{display:flex;gap:16px;flex-wrap:wrap;animation:fadeUp .8s .8s ease both;}
+    .btn-glow{display:inline-flex;align-items:center;gap:10px;font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;color:var(--bg);background:linear-gradient(90deg,var(--cyan),var(--cyan2));padding:14px 36px;cursor:none;position:relative;overflow:hidden;clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);transition:box-shadow .3s;}
+    .btn-glow::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.2);transform:translateX(-100%);transition:transform .4s;}
+    .btn-glow:hover{box-shadow:0 0 28px rgba(0,245,255,.6);}
+    .btn-glow:hover::after{transform:translateX(0);}
+    .btn-outline{display:inline-flex;align-items:center;gap:10px;font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;color:var(--pink);border:1px solid var(--pink2);padding:14px 36px;cursor:none;clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);transition:background .3s,box-shadow .3s;}
+    .btn-outline:hover{background:rgba(255,45,120,.1);box-shadow:0 0 20px rgba(255,45,120,.3);}
+    .hero-stats{position:absolute;right:60px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:16px;animation:fadeUp 1s 1s ease both;}
+    .h-stat{border:1px solid var(--border);padding:18px 24px;background:var(--panel);backdrop-filter:blur(10px);position:relative;text-align:center;min-width:130px;}
+    .h-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);}
+    .h-stat-num{font-family:'Orbitron',monospace;font-size:1.9rem;font-weight:900;color:var(--cyan);text-shadow:0 0 18px rgba(0,245,255,.5);line-height:1;}
+    .h-stat-label{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:6px;}
+    .scroll-ind{position:absolute;bottom:40px;left:60px;display:flex;align-items:center;gap:12px;animation:fadeUp 1s 1.2s ease both;}
+    .s-bar{width:1px;height:50px;background:linear-gradient(to bottom,transparent,var(--cyan),transparent);animation:sAnim 2s infinite;}
+    @keyframes sAnim{0%,100%{opacity:.3}50%{opacity:1}}
+    .s-txt{font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);writing-mode:vertical-rl;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+    /* MARQUEE */
+    .marquee{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(0,245,255,.025);padding:12px 0;overflow:hidden;}
+    .marquee-inner{display:flex;animation:marq 25s linear infinite;white-space:nowrap;}
+    .m-item{display:inline-flex;align-items:center;gap:18px;padding:0 18px;font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.2em;color:var(--cyan);}
+    .m-sep{color:var(--pink);}
+    @keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* SECTION */
+    section{padding:120px 60px;position:relative;}
+    .sec-tag{font-family:'Share Tech Mono',monospace;font-size:.63rem;letter-spacing:.4em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+    .sec-tag::before{content:'//';color:var(--pink);}
+    .sec-title{font-family:'Orbitron',monospace;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;color:#fff;line-height:1.15;}
+    .sec-title span{color:var(--cyan);}
+    .sec-div{display:flex;align-items:center;gap:12px;margin-top:18px;}
+    .sd-l{flex:1;max-width:80px;height:1px;background:linear-gradient(90deg,var(--cyan),transparent);}
+    .sd-d{width:6px;height:6px;background:var(--cyan);transform:rotate(45deg);}
+    .sd-l2{flex:1;max-width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--cyan));}
+
+    /* SERVICES */
+    .services{background:var(--bg2);}
+    .svc-header{text-align:center;margin-bottom:70px;}
+    .svc-header .sec-tag{justify-content:center;}
+    .svc-header .sec-div{justify-content:center;}
+    .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+    .svc-card{background:var(--panel);border:1px solid var(--border);padding:44px 34px;position:relative;overflow:hidden;cursor:none;transition:border-color .4s,background .4s;}
+    .svc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--pink));transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+    .svc-card:hover{border-color:rgba(0,245,255,.3);background:rgba(0,245,255,.055);}
+    .svc-card:hover::before{transform:scaleX(1);}
+    .svc-num{font-family:'Orbitron',monospace;font-size:3.2rem;font-weight:900;color:rgba(0,245,255,.055);line-height:1;margin-bottom:18px;transition:color .4s;}
+    .svc-card:hover .svc-num{color:rgba(0,245,255,.12);}
+    .svc-icon{width:50px;height:50px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:18px;transition:border-color .4s,box-shadow .4s;}
+    .svc-card:hover .svc-icon{border-color:var(--cyan);box-shadow:0 0 14px rgba(0,245,255,.2);}
+    .svc-name{font-family:'Orbitron',monospace;font-size:.85rem;font-weight:700;color:#fff;letter-spacing:.04em;margin-bottom:10px;}
+    .svc-desc{font-size:.88rem;font-weight:300;color:var(--muted);line-height:1.75;}
+    .svc-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:22px;}
+    .svc-tag{font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.12em;color:var(--cyan);border:1px solid rgba(0,245,255,.2);padding:3px 9px;background:rgba(0,245,255,.04);}
+
+    /* ABOUT */
+    .about-wrap{display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:center;}
+    .about-screen{border:1px solid var(--border);background:var(--bg3);padding:22px;position:relative;}
+    .about-screen::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--cyan),var(--pink),var(--cyan));animation:scanTop 3s linear infinite;}
+    @keyframes scanTop{0%,100%{opacity:.4}50%{opacity:1}}
+    .screen-bar{display:flex;align-items:center;gap:7px;margin-bottom:18px;}
+    .sb-dot{width:10px;height:10px;border-radius:50%;}
+    .sb-title{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted);margin-left:8px;letter-spacing:.12em;}
+    .code-block{font-family:'Share Tech Mono',monospace;font-size:.73rem;line-height:2;}
+    .c-m{color:var(--muted)}.c-c{color:var(--cyan)}.c-p{color:var(--pink)}.c-g{color:var(--green)}.c-y{color:var(--yellow)}.c-w{color:#fff}
+    .blink-cur{display:inline-block;width:8px;height:13px;background:var(--cyan);animation:blink 1s infinite;vertical-align:middle;}
+    .about-float{position:absolute;bottom:-22px;right:-22px;border:1px solid var(--border2);background:var(--bg);padding:18px 22px;min-width:150px;}
+    .af-lbl{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--pink);letter-spacing:.2em;margin-bottom:3px;}
+    .af-val{font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:900;color:var(--pink);text-shadow:0 0 18px rgba(255,45,120,.4);}
+    .about-text .sec-tag{justify-content:flex-start;}
+    .about-body{font-size:.95rem;font-weight:300;color:var(--muted);line-height:1.9;margin:22px 0;}
+    .about-body strong{color:var(--text);font-weight:500;}
+    .about-list{list-style:none;display:flex;flex-direction:column;gap:11px;margin-top:22px;}
+    .about-list li{display:flex;align-items:center;gap:11px;font-size:.9rem;font-weight:500;color:var(--text);}
+    .about-list li::before{content:'▶';color:var(--cyan);font-size:.45rem;}
+
+    /* PORTFOLIO */
+    .portfolio{background:var(--bg2);}
+    .port-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;gap:2px;margin-top:60px;}
+    .port-card{position:relative;overflow:hidden;cursor:none;background:var(--bg3);border:1px solid var(--border);}
+    .port-card:first-child{grid-column:1/3;}
+    .port-inner{aspect-ratio:16/9;position:relative;overflow:hidden;}
+    .port-card:first-child .port-inner{aspect-ratio:21/9;}
+    .port-visual{width:100%;height:100%;display:flex;align-items:center;justify-content:center;transition:transform .5s ease;}
+    .port-card:hover .port-visual{transform:scale(1.04);}
+    .port-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(3,7,18,.94) 0%,rgba(3,7,18,.15) 60%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:26px;transition:background .3s;}
+    .port-card:hover .port-overlay{background:linear-gradient(to top,rgba(3,7,18,.98) 0%,rgba(3,7,18,.4) 60%,rgba(3,7,18,.1) 100%);}
+    .port-cat{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--cyan);letter-spacing:.3em;margin-bottom:5px;}
+    .port-name{font-family:'Orbitron',monospace;font-size:.95rem;font-weight:700;color:#fff;margin-bottom:5px;}
+    .port-sub{font-size:.78rem;color:var(--muted);}
+    .port-link{display:inline-flex;align-items:center;gap:8px;font-family:'Orbitron',monospace;font-size:.58rem;font-weight:600;letter-spacing:.2em;color:var(--cyan);margin-top:12px;text-decoration:none;cursor:none;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;}
+    .port-card:hover .port-link{opacity:1;transform:translateY(0);}
+
+    /* TECH */
+    .tech-section{text-align:center;}
+    .tech-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:11px;margin-top:56px;}
+    .tech-chip{display:flex;align-items:center;gap:9px;border:1px solid var(--border);padding:9px 18px;background:var(--panel);font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.08em;color:var(--text);transition:border-color .3s,color .3s,box-shadow .3s;cursor:none;}
+    .tech-chip:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 12px rgba(0,245,255,.15);}
+    .chip-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+
+    /* TESTIMONIALS */
+    .testi-section{background:var(--bg2);}
+    .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px;}
+    .testi-card{border:1px solid var(--border);padding:38px 30px;background:var(--panel);position:relative;transition:border-color .3s;}
+    .testi-card:hover{border-color:rgba(0,245,255,.3);}
+    .testi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;}
+    .testi-stars{color:var(--yellow);font-size:.72rem;letter-spacing:2px;}
+    .testi-qmark{font-family:'Orbitron',monospace;font-size:2.8rem;font-weight:900;color:rgba(0,245,255,.07);line-height:1;}
+    .testi-text{font-size:.9rem;font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:26px;font-style:italic;}
+    .testi-author{display:flex;align-items:center;gap:12px;}
+    .testi-ava{width:42px;height:42px;border:1px solid var(--border);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:.78rem;font-weight:700;color:var(--cyan);}
+    .testi-name{font-family:'Orbitron',monospace;font-size:.68rem;font-weight:600;color:#fff;margin-bottom:2px;}
+    .testi-role{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--muted);letter-spacing:.12em;}
+
+    /* PRICING */
+    .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px;}
+    .price-card{border:1px solid var(--border);padding:44px 34px;background:var(--panel);position:relative;transition:border-color .3s,background .3s;}
+    .price-card.featured{border-color:var(--cyan);background:rgba(0,245,255,.045);}
+    .price-card.featured::before{content:'POPULER';position:absolute;top:-1px;right:22px;font-family:'Orbitron',monospace;font-size:.52rem;font-weight:700;letter-spacing:.2em;color:var(--bg);background:var(--cyan);padding:4px 12px;}
+    .price-card:hover{border-color:rgba(0,245,255,.35);background:rgba(0,245,255,.055);}
+    .price-plan{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.35em;color:var(--cyan);margin-bottom:14px;}
+    .price-amount{font-family:'Orbitron',monospace;font-weight:900;line-height:1;margin-bottom:4px;}
+    .price-cur{font-size:1.4rem;color:var(--muted);vertical-align:top;margin-top:8px;display:inline-block;}
+    .price-num{font-size:2.8rem;color:#fff;}
+    .price-jt{font-size:1.4rem;color:var(--muted);}
+    .price-period{font-size:.68rem;color:var(--muted);letter-spacing:.1em;margin-bottom:14px;}
+    .price-desc{font-size:.84rem;color:var(--muted);margin-bottom:26px;line-height:1.65;}
+    .price-line{height:1px;background:var(--border);margin-bottom:26px;}
+    .price-features{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:34px;}
+    .price-features li{display:flex;align-items:center;gap:9px;font-size:.84rem;color:var(--text);}
+    .price-features li::before{content:'✓';color:var(--green);font-size:.75rem;}
+    .price-features li.off{color:var(--muted);}
+    .price-features li.off::before{content:'✕';color:var(--muted);}
+    .price-btn{display:block;text-align:center;text-decoration:none;cursor:none;font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:13px;border:1px solid var(--cyan);color:var(--cyan);transition:background .3s,color .3s,box-shadow .3s;}
+    .price-btn:hover{background:var(--cyan);color:var(--bg);box-shadow:0 0 20px rgba(0,245,255,.4);}
+    .price-btn.solid{background:var(--cyan);color:var(--bg);}
+    .price-btn.solid:hover{box-shadow:0 0 28px rgba(0,245,255,.5);}
+
+    /* CTA */
+    .cta-section{text-align:center;position:relative;overflow:hidden;border-top:1px solid var(--border);}
+    .cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,245,255,.05) 0%,transparent 70%);}
+    .cta-glitch{font-family:'Orbitron',monospace;font-weight:900;font-size:clamp(1.8rem,4.5vw,3.8rem);color:#fff;position:relative;display:inline-block;margin-bottom:18px;}
+    .cta-glitch::before,.cta-glitch::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;}
+    .cta-glitch::before{color:var(--cyan);left:2px;clip-path:polygon(0 20%,100% 20%,100% 40%,0 40%);animation:g1 5s infinite;}
+    .cta-glitch::after{color:var(--pink);left:-2px;clip-path:polygon(0 60%,100% 60%,100% 80%,0 80%);animation:g2 5s infinite;}
+    @keyframes g1{0%,90%,100%{transform:none;opacity:0}92%{transform:skewX(5deg);opacity:.8}94%{transform:none;opacity:0}96%{transform:skewX(-3deg);opacity:.6}98%{transform:none;opacity:0}}
+    @keyframes g2{0%,91%,100%{transform:none;opacity:0}93%{transform:skewX(-5deg);opacity:.8}95%{transform:none;opacity:0}97%{transform:skewX(3deg);opacity:.5}99%{transform:none;opacity:0}}
+    .cta-sub{font-size:1rem;color:var(--muted);max-width:520px;margin:0 auto 18px;line-height:1.8;}
+    .cta-sub span{color:var(--cyan);}
+    .terminal-ln{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--green);margin-bottom:38px;letter-spacing:.1em;}
+    .terminal-ln::before{content:'> ';color:var(--muted);}
+    .cta-btns{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;}
+
+    /* FOOTER */
+    footer{background:#020509;border-top:1px solid var(--border);padding:80px 60px 40px;}
+    .footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;margin-bottom:56px;}
+    .f-logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.15rem;letter-spacing:.08em;display:block;margin-bottom:12px;}
+    .fc{color:var(--cyan)}.fp{color:var(--pink)}.fw{color:#fff}
+    .f-desc{font-size:.83rem;color:var(--muted);line-height:1.75;max-width:250px;}
+    .f-status{display:flex;align-items:center;gap:8px;margin-top:18px;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--green);}
+    .f-sdot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite;}
+    .f-col-title{font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;letter-spacing:.15em;color:var(--cyan);margin-bottom:18px;}
+    .f-links{list-style:none;display:flex;flex-direction:column;gap:9px;}
+    .f-links a{font-size:.83rem;color:var(--muted);text-decoration:none;cursor:none;transition:color .3s;}
+    .f-links a:hover{color:var(--cyan);}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,.05);padding-top:26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+    .f-copy{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:rgba(91,127,160,.45);letter-spacing:.12em;}
+    .f-socials{display:flex;gap:9px;}
+    .f-soc{width:34px;height:34px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--muted);text-decoration:none;cursor:none;font-family:'Share Tech Mono',monospace;transition:border-color .3s,color .3s,box-shadow .3s;}
+    .f-soc:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 10px rgba(0,245,255,.2);}
+
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+
+    /* RESPONSIVE */
+    @media(max-width:1024px){
+      nav{padding:0 24px;} .nav-links{display:none;}
+      .hero{padding:100px 24px 60px;} .hero-stats{display:none;}
+      section{padding:80px 24px;}
+      .svc-grid,.testi-grid,.price-grid{grid-template-columns:1fr;}
+      .about-wrap{grid-template-columns:1fr;gap:60px;}
+      .port-grid{grid-template-columns:1fr;}
+      .port-card:first-child{grid-column:auto;}
+      footer{padding:60px 24px 36px;}
+      .footer-top{grid-template-columns:1fr 1fr;gap:36px;}
+    }
+  </style>
 </head>
 <body>
-    <h1>Selamat Datang di Website Company Profile</h1>
-    <p>Website ini berjalan menggunakan Docker dan Nginx.</p>
+  <div id="cur"></div>
+  <div id="cur2"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="logo-box">⬡</div>
+      <span style="color:var(--cyan)">ANAM</span><span style="color:var(--pink)">-</span><span style="color:#fff">GAMING</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-btn">Get Quote</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-grid"></div>
+    <div class="hero-glow1"></div>
+    <div class="hero-glow2"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span class="badge-text">System Online — Menerima Project Baru</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="t-white">Digital &amp;</span>
+        <span class="t-cyan">Technology</span>
+        <span class="t-outline">Solutions</span>
+      </h1>
+      <p class="hero-sub">
+        <span>Anam-Gaming</span> adalah studio teknologi digital yang menghadirkan solusi inovatif — web development, mobile app, game development, hingga infrastruktur cloud. Kami membangun masa depan digital Anda.
+      </p>
+      <div class="hero-btns">
+        <a href="#portfolio" class="btn-glow">▶ Lihat Portfolio</a>
+        <a href="#services" class="btn-outline">// Layanan Kami</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="h-stat"><div class="h-stat-num" data-target="150" data-suffix="+">0</div><div class="h-stat-label">Projects Done</div></div>
+      <div class="h-stat"><div class="h-stat-num" data-target="98" data-suffix="%">0</div><div class="h-stat-label">Client Satisfied</div></div>
+      <div class="h-stat"><div class="h-stat-num" data-target="5" data-suffix="+">0</div><div class="h-stat-label">Years Active</div></div>
+      <div class="h-stat"><div class="h-stat-num" data-target="24" data-suffix="/7">0</div><div class="h-stat-label">Support Hours</div></div>
+    </div>
+    <div class="scroll-ind"><div class="s-bar"></div><span class="s-txt">Scroll</span></div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee">
+    <div class="marquee-inner">
+      <div class="m-item">WEB DEVELOPMENT <span class="m-sep">✦</span></div>
+      <div class="m-item">MOBILE APP <span class="m-sep">✦</span></div>
+      <div class="m-item">GAME DEVELOPMENT <span class="m-sep">✦</span></div>
+      <div class="m-item">UI/UX DESIGN <span class="m-sep">✦</span></div>
+      <div class="m-item">DIGITAL MARKETING <span class="m-sep">✦</span></div>
+      <div class="m-item">CLOUD SOLUTION <span class="m-sep">✦</span></div>
+      <div class="m-item">CYBERSECURITY <span class="m-sep">✦</span></div>
+      <div class="m-item">E-SPORT PLATFORM <span class="m-sep">✦</span></div>
+      <div class="m-item">WEB DEVELOPMENT <span class="m-sep">✦</span></div>
+      <div class="m-item">MOBILE APP <span class="m-sep">✦</span></div>
+      <div class="m-item">GAME DEVELOPMENT <span class="m-sep">✦</span></div>
+      <div class="m-item">UI/UX DESIGN <span class="m-sep">✦</span></div>
+      <div class="m-item">DIGITAL MARKETING <span class="m-sep">✦</span></div>
+      <div class="m-item">CLOUD SOLUTION <span class="m-sep">✦</span></div>
+      <div class="m-item">CYBERSECURITY <span class="m-sep">✦</span></div>
+      <div class="m-item">E-SPORT PLATFORM <span class="m-sep">✦</span></div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="svc-header reveal">
+      <div class="sec-tag">Layanan Kami</div>
+      <h2 class="sec-title">Solusi <span>Digital</span> Terlengkap</h2>
+      <div class="sec-div"><div class="sd-l"></div><div class="sd-d"></div><div class="sd-l2"></div></div>
+    </div>
+    <div class="svc-grid reveal">
+      <div class="svc-card">
+        <div class="svc-num">01</div>
+        <div class="svc-icon">🌐</div>
+        <div class="svc-name">Web Development</div>
+        <p class="svc-desc">Website modern, responsif, dan berperforma tinggi untuk bisnis dan gaming Anda dengan teknologi terkini.</p>
+        <div class="svc-tags"><span class="svc-tag">React</span><span class="svc-tag">Next.js</span><span class="svc-tag">Laravel</span><span class="svc-tag">Vue</span></div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">02</div>
+        <div class="svc-icon">📱</div>
+        <div class="svc-name">Mobile App</div>
+        <p class="svc-desc">Aplikasi mobile iOS &amp; Android yang intuitif, cepat, dan terintegrasi penuh dengan ekosistem digital Anda.</p>
+        <div class="svc-tags"><span class="svc-tag">Flutter</span><span class="svc-tag">React Native</span><span class="svc-tag">Kotlin</span></div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">03</div>
+        <div class="svc-icon">🎮</div>
+        <div class="svc-name">Game Development</div>
+        <p class="svc-desc">Dari konsep hingga publish — mobile game, browser game, dan platform e-sport profesional.</p>
+        <div class="svc-tags"><span class="svc-tag">Unity</span><span class="svc-tag">Unreal</span><span class="svc-tag">Godot</span></div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">04</div>
+        <div class="svc-icon">🎨</div>
+        <div class="svc-name">UI/UX Design</div>
+        <p class="svc-desc">Desain antarmuka yang indah sekaligus optimal untuk pengalaman pengguna terbaik.</p>
+        <div class="svc-tags"><span class="svc-tag">Figma</span><span class="svc-tag">Prototyping</span><span class="svc-tag">Branding</span></div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">05</div>
+        <div class="svc-icon">☁️</div>
+        <div class="svc-name">Cloud &amp; DevOps</div>
+        <p class="svc-desc">Infrastruktur cloud scalable, aman, dan siap menampung traffic tinggi untuk app &amp; game online.</p>
+        <div class="svc-tags"><span class="svc-tag">AWS</span><span class="svc-tag">Docker</span><span class="svc-tag">CI/CD</span></div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">06</div>
+        <div class="svc-icon">📈</div>
+        <div class="svc-name">Digital Marketing</div>
+        <p class="svc-desc">Strategi pemasaran digital terukur — SEO, social media, influencer gaming, dan performa iklan berbasis data.</p>
+        <div class="svc-tags"><span class="svc-tag">SEO</span><span class="svc-tag">SEM</span><span class="svc-tag">Analytics</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-wrap">
+      <div class="reveal" style="position:relative;">
+        <div class="about-screen">
+          <div class="screen-bar">
+            <div class="sb-dot" style="background:#FF5F57"></div>
+            <div class="sb-dot" style="background:#FEBC2E"></div>
+            <div class="sb-dot" style="background:#28C840"></div>
+            <span class="sb-title">anam-gaming.sys — terminal v2.0</span>
+          </div>
+          <div class="code-block">
+            <div><span class="c-m">// Anam-Gaming Company Profile</span></div>
+            <div><span class="c-p">const</span> <span class="c-c">studio</span> = {</div>
+            <div>&nbsp;&nbsp;<span class="c-y">name</span>: <span class="c-g">"Anam-Gaming"</span>,</div>
+            <div>&nbsp;&nbsp;<span class="c-y">type</span>: <span class="c-g">"Digital Tech Studio"</span>,</div>
+            <div>&nbsp;&nbsp;<span class="c-y">founded</span>: <span class="c-c">2020</span>,</div>
+            <div>&nbsp;&nbsp;<span class="c-y">expertise</span>: [</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-g">"Gaming"</span>, <span class="c-g">"Web"</span>,</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-g">"Mobile"</span>, <span class="c-g">"Cloud"</span></div>
+            <div>&nbsp;&nbsp;],</div>
+            <div>&nbsp;&nbsp;<span class="c-y">clients</span>: <span class="c-c">150+</span>,</div>
+            <div>&nbsp;&nbsp;<span class="c-y">status</span>: <span class="c-g">"ACTIVE 🟢"</span></div>
+            <div>}</div>
+            <div>&nbsp;</div>
+            <div><span class="c-p">return</span> <span class="c-c">studio</span>.<span class="c-y">deliver</span>(<span class="c-g">"excellence"</span>);</div>
+            <div><span class="c-m">//</span> <span class="c-g">✓ "Project Delivered Successfully"</span><span class="blink-cur"></span></div>
+          </div>
+        </div>
+        <div class="about-float">
+          <div class="af-lbl">// SUCCESS RATE</div>
+          <div class="af-val">98%</div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="sec-tag">Tentang Kami</div>
+        <h2 class="sec-title">Kami Adalah <span>Inovator</span><br>Dunia Digital</h2>
+        <div class="sec-div"><div class="sd-l"></div><div class="sd-d"></div></div>
+        <p class="about-body"><strong>Anam-Gaming</strong> adalah studio teknologi digital yang lahir dari passion terhadap dunia gaming dan inovasi. Kami menggabungkan kreativitas desainer, keahlian developer, dan strategi bisnis untuk solusi digital yang nyata.</p>
+        <p class="about-body">Dari startup hingga enterprise, kami telah membantu <strong>150+ klien</strong> mewujudkan visi digital mereka — platform e-sport, aplikasi mobile, hingga sistem cloud enterprise.</p>
+        <ul class="about-list">
+          <li>Tim profesional berpengalaman 5+ tahun</li>
+          <li>Teknologi terkini &amp; best practice industri</li>
+          <li>Support 24/7 untuk semua klien aktif</li>
+          <li>Garansi kepuasan &amp; revisi unlimited</li>
+          <li>150+ proyek sukses terdelivery</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section class="portfolio" id="portfolio">
+    <div class="reveal">
+      <div class="sec-tag">Portfolio</div>
+      <h2 class="sec-title">Karya <span>Terbaik</span> Kami</h2>
+      <div class="sec-div"><div class="sd-l"></div><div class="sd-d"></div></div>
+    </div>
+    <div class="port-grid reveal">
+      <!-- Card 1 – large -->
+      <div class="port-card">
+        <div class="port-inner">
+          <div class="port-visual">
+            <svg width="100%" height="100%" viewBox="0 0 900 390" preserveAspectRatio="xMidYMid slice">
+              <rect width="900" height="390" fill="#060E1F"/>
+              <defs>
+                <radialGradient id="pg1" cx="30%" cy="50%"><stop offset="0%" stop-color="#00F5FF" stop-opacity=".13"/><stop offset="100%" stop-color="#00F5FF" stop-opacity="0"/></radialGradient>
+                <radialGradient id="pg1b" cx="70%" cy="50%"><stop offset="0%" stop-color="#FF2D78" stop-opacity=".1"/><stop offset="100%" stop-color="#FF2D78" stop-opacity="0"/></radialGradient>
+              </defs>
+              <rect width="900" height="390" fill="url(#pg1)"/>
+              <rect width="900" height="390" fill="url(#pg1b)"/>
+              <g stroke="#00F5FF" stroke-width=".4" opacity=".08">
+                <line x1="0" y1="78" x2="900" y2="78"/><line x1="0" y1="156" x2="900" y2="156"/>
+                <line x1="0" y1="234" x2="900" y2="234"/><line x1="0" y1="312" x2="900" y2="312"/>
+                <line x1="90" y1="0" x2="90" y2="390"/><line x1="180" y1="0" x2="180" y2="390"/>
+                <line x1="270" y1="0" x2="270" y2="390"/><line x1="360" y1="0" x2="360" y2="390"/>
+                <line x1="450" y1="0" x2="450" y2="390"/><line x1="540" y1="0" x2="540" y2="390"/>
+                <line x1="630" y1="0" x2="630" y2="390"/><line x1="720" y1="0" x2="720" y2="390"/>
+                <line x1="810" y1="0" x2="810" y2="390"/>
+              </g>
+              <!-- UI mockup left panel -->
+              <rect x="50" y="30" width="360" height="330" rx="4" fill="rgba(0,245,255,.03)" stroke="#00F5FF" stroke-width=".8" stroke-opacity=".25"/>
+              <rect x="50" y="30" width="360" height="28" fill="rgba(0,245,255,.07)"/>
+              <circle cx="66" cy="44" r="4" fill="#FF5F57"/><circle cx="82" cy="44" r="4" fill="#FEBC2E"/><circle cx="98" cy="44" r="4" fill="#28C840"/>
+              <text x="120" y="49" font-family="Share Tech Mono" font-size="9" fill="#00F5FF" opacity=".5" letter-spacing="2">NEXUS PLATFORM v3.0</text>
+              <rect x="66" y="74" width="160" height="8" rx="2" fill="#00F5FF" opacity=".25"/>
+              <rect x="66" y="90" width="100" height="5" rx="2" fill="#00F5FF" opacity=".12"/>
+              <rect x="66" y="108" width="320" height="90" rx="2" fill="rgba(0,245,255,.04)" stroke="#00F5FF" stroke-width=".5" stroke-opacity=".2"/>
+              <text x="80" y="130" font-family="Share Tech Mono" font-size="8" fill="#00F5FF" opacity=".35" letter-spacing="1">LEADERBOARD</text>
+              <rect x="80" y="138" width="280" height="6" rx="1" fill="#00F5FF" opacity=".15"/>
+              <rect x="80" y="150" width="220" height="6" rx="1" fill="#00F5FF" opacity=".1"/>
+              <rect x="80" y="162" width="250" height="6" rx="1" fill="#00F5FF" opacity=".12"/>
+              <rect x="80" y="174" width="190" height="6" rx="1" fill="#00F5FF" opacity=".08"/>
+              <rect x="66" y="216" width="148" height="36" rx="2" fill="#00F5FF" opacity=".15"/>
+              <rect x="222" y="216" width="80" height="36" rx="2" fill="rgba(255,45,120,.12)" stroke="#FF2D78" stroke-width=".5" stroke-opacity=".4"/>
+              <rect x="66" y="268" width="320" height="1" fill="#00F5FF" opacity=".08"/>
+              <rect x="66" y="280" width="60" height="24" rx="2" fill="rgba(0,255,156,.08)" stroke="#00FF9C" stroke-width=".4" stroke-opacity=".3"/>
+              <rect x="134" y="280" width="60" height="24" rx="2" fill="rgba(255,224,51,.08)" stroke="#FFE033" stroke-width=".4" stroke-opacity=".3"/>
+              <rect x="202" y="280" width="60" height="24" rx="2" fill="rgba(255,45,120,.08)" stroke="#FF2D78" stroke-width=".4" stroke-opacity=".3"/>
+              <!-- Chart right -->
+              <polyline points="470,300 520,245 570,265 620,195 670,215 720,155 770,175 830,125 870,140" fill="none" stroke="#00F5FF" stroke-width="2" opacity=".6"/>
+              <polygon points="470,300 520,245 570,265 620,195 670,215 720,155 770,175 830,125 870,140 870,360 470,360" fill="#00F5FF" opacity=".04"/>
+              <circle cx="720" cy="155" r="5" fill="#00F5FF" opacity=".8"/>
+              <line x1="720" y1="155" x2="720" y2="360" stroke="#00F5FF" stroke-width=".5" stroke-dasharray="4" opacity=".25"/>
+              <g font-family="Share Tech Mono" font-size="8" fill="#00F5FF" opacity=".3" letter-spacing="1">
+                <text x="470" y="380">JAN</text><text x="570" y="380">MAR</text><text x="670" y="380">MAY</text><text x="770" y="380">JUL</text><text x="840" y="380">SEP</text>
+              </g>
+            </svg>
+          </div>
+          <div class="port-overlay">
+            <div class="port-cat">// E-Sport Platform</div>
+            <div class="port-name">Nexus E-Sport Hub</div>
+            <div class="port-sub">Platform turnamen gaming online — matchmaking, leaderboard real-time, manajemen tim &amp; statistik pemain</div>
+            <a href="#" class="port-link">View Project ›</a>
+          </div>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="port-card">
+        <div class="port-inner">
+          <div class="port-visual">
+            <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+              <rect width="400" height="300" fill="#0A1628"/>
+              <defs><radialGradient id="pg3" cx="50%" cy="50%"><stop offset="0%" stop-color="#FF2D78" stop-opacity=".13"/><stop offset="100%" stop-color="#FF2D78" stop-opacity="0"/></radialGradient></defs>
+              <rect width="400" height="300" fill="url(#pg3)"/>
+              <rect x="130" y="20" width="140" height="260" rx="18" fill="rgba(255,45,120,.04)" stroke="#FF2D78" stroke-width="1" stroke-opacity=".4"/>
+              <rect x="145" y="40" width="110" height="220" rx="4" fill="rgba(255,45,120,.04)"/>
+              <rect x="155" y="55" width="90" height="12" rx="2" fill="#FF2D78" opacity=".3"/>
+              <rect x="155" y="74" width="60" height="7" rx="2" fill="#FF2D78" opacity=".15"/>
+              <rect x="155" y="94" width="90" height="60" rx="4" fill="rgba(255,45,120,.07)" stroke="#FF2D78" stroke-width=".5" stroke-opacity=".3"/>
+              <circle cx="200" cy="124" r="18" fill="rgba(255,45,120,.1)" stroke="#FF2D78" stroke-width=".8" stroke-opacity=".4"/>
+              <text x="200" y="130" text-anchor="middle" font-size="14">🎮</text>
+              <rect x="155" y="168" width="90" height="22" rx="11" fill="#FF2D78" opacity=".8"/>
+              <text x="200" y="183" text-anchor="middle" font-family="Orbitron" font-size="6.5" fill="#030712" font-weight="700" letter-spacing="1">PLAY NOW</text>
+              <rect x="155" y="200" width="40" height="22" rx="4" fill="rgba(0,245,255,.08)" stroke="#00F5FF" stroke-width=".4" stroke-opacity=".3"/>
+              <rect x="205" y="200" width="40" height="22" rx="4" fill="rgba(0,245,255,.05)" stroke="#00F5FF" stroke-width=".4" stroke-opacity=".2"/>
+              <circle cx="60" cy="80" r="38" fill="none" stroke="#FF2D78" stroke-width=".5" opacity=".18"/>
+              <circle cx="340" cy="220" r="48" fill="none" stroke="#FF2D78" stroke-width=".5" opacity=".13"/>
+            </svg>
+          </div>
+          <div class="port-overlay">
+            <div class="port-cat">// Mobile App</div>
+            <div class="port-name">GameZone Mobile</div>
+            <div class="port-sub">Aplikasi gaming mobile all-in-one, 50K+ downloads</div>
+            <a href="#" class="port-link">View Project ›</a>
+          </div>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="port-card">
+        <div class="port-inner">
+          <div class="port-visual">
+            <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+              <rect width="400" height="300" fill="#0A1628"/>
+              <defs><radialGradient id="pg4" cx="50%" cy="50%"><stop offset="0%" stop-color="#00FF9C" stop-opacity=".1"/><stop offset="100%" stop-color="#00FF9C" stop-opacity="0"/></radialGradient></defs>
+              <rect width="400" height="300" fill="url(#pg4)"/>
+              <rect x="28" y="18" width="344" height="264" rx="4" fill="rgba(0,255,156,.025)" stroke="#00FF9C" stroke-width=".6" stroke-opacity=".22"/>
+              <rect x="28" y="18" width="58" height="264" fill="rgba(0,255,156,.04)"/>
+              <circle cx="57" cy="46" r="11" fill="rgba(0,255,156,.14)"/>
+              <rect x="41" y="68" width="32" height="4" rx="2" fill="#00FF9C" opacity=".3"/>
+              <rect x="41" y="80" width="32" height="4" rx="2" fill="#00FF9C" opacity=".14"/>
+              <rect x="41" y="92" width="32" height="4" rx="2" fill="#00FF9C" opacity=".14"/>
+              <rect x="98" y="34" width="100" height="12" rx="2" fill="#00FF9C" opacity=".18"/>
+              <rect x="98" y="58" width="60" height="38" rx="2" fill="rgba(0,255,156,.07)" stroke="#00FF9C" stroke-width=".4" stroke-opacity=".28"/>
+              <rect x="166" y="58" width="60" height="38" rx="2" fill="rgba(0,245,255,.05)" stroke="#00F5FF" stroke-width=".4" stroke-opacity=".28"/>
+              <rect x="234" y="58" width="60" height="38" rx="2" fill="rgba(255,45,120,.05)" stroke="#FF2D78" stroke-width=".4" stroke-opacity=".28"/>
+              <polyline points="98,158 128,138 158,148 188,118 218,130 248,108 278,120 308,100 338,112 358,104" fill="none" stroke="#00FF9C" stroke-width="1.5" opacity=".55"/>
+              <polygon points="98,158 128,138 158,148 188,118 218,130 248,108 278,120 308,100 338,112 358,104 358,268 98,268" fill="#00FF9C" opacity=".03"/>
+              <rect x="98" y="178" width="262" height="44" rx="2" fill="rgba(0,255,156,.025)"/>
+            </svg>
+          </div>
+          <div class="port-overlay">
+            <div class="port-cat">// Dashboard</div>
+            <div class="port-name">Analytics Command</div>
+            <div class="port-sub">Sistem dashboard analytics real-time enterprise</div>
+            <a href="#" class="port-link">View Project ›</a>
+          </div>
+        </div>
+      </div>
+      <!-- Card 4 -->
+      <div class="port-card">
+        <div class="port-inner">
+          <div class="port-visual">
+            <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+              <rect width="400" height="300" fill="#0A1628"/>
+              <defs><radialGradient id="pg5" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFE033" stop-opacity=".1"/><stop offset="100%" stop-color="#FFE033" stop-opacity="0"/></radialGradient></defs>
+              <rect width="400" height="300" fill="url(#pg5)"/>
+              <rect x="18" y="18" width="364" height="264" fill="none" stroke="#FFE033" stroke-width=".5" stroke-opacity=".13"/>
+              <text x="28" y="42" font-family="Share Tech Mono" font-size="8" fill="#FFE033" opacity=".45" letter-spacing="2">HP</text>
+              <rect x="48" y="30" width="140" height="12" rx="2" fill="rgba(255,224,51,.1)" stroke="#FFE033" stroke-width=".5" stroke-opacity=".28"/>
+              <rect x="48" y="30" width="108" height="12" rx="2" fill="#FFE033" opacity=".55"/>
+              <text x="28" y="62" font-family="Share Tech Mono" font-size="8" fill="#00F5FF" opacity=".45" letter-spacing="2">MP</text>
+              <rect x="48" y="50" width="140" height="12" rx="2" fill="rgba(0,245,255,.1)" stroke="#00F5FF" stroke-width=".5" stroke-opacity=".28"/>
+              <rect x="48" y="50" width="78" height="12" rx="2" fill="#00F5FF" opacity=".5"/>
+              <rect x="118" y="78" width="164" height="138" rx="4" fill="rgba(255,224,51,.03)" stroke="#FFE033" stroke-width=".5" stroke-opacity=".18"/>
+              <circle cx="200" cy="147" r="30" fill="rgba(255,224,51,.05)" stroke="#FFE033" stroke-width=".5" stroke-opacity=".28"/>
+              <circle cx="200" cy="147" r="8" fill="#FFE033" opacity=".38"/>
+              <circle cx="168" cy="128" r="3" fill="#00FF9C" opacity=".7"/>
+              <circle cx="228" cy="158" r="3" fill="#FF2D78" opacity=".7"/>
+              <circle cx="188" cy="168" r="3" fill="#FFE033" opacity=".85"/>
+              <rect x="118" y="232" width="36" height="36" rx="4" fill="rgba(255,224,51,.09)" stroke="#FFE033" stroke-width=".4" stroke-opacity=".45"/>
+              <rect x="162" y="232" width="36" height="36" rx="4" fill="rgba(0,245,255,.07)" stroke="#00F5FF" stroke-width=".4" stroke-opacity=".28"/>
+              <rect x="206" y="232" width="36" height="36" rx="4" fill="rgba(255,45,120,.07)" stroke="#FF2D78" stroke-width=".4" stroke-opacity=".28"/>
+              <rect x="250" y="232" width="36" height="36" rx="4" fill="rgba(0,255,156,.07)" stroke="#00FF9C" stroke-width=".4" stroke-opacity=".28"/>
+            </svg>
+          </div>
+          <div class="port-overlay">
+            <div class="port-cat">// Game Dev</div>
+            <div class="port-name">BattleArena Online</div>
+            <div class="port-sub">Browser-based multiplayer battle game</div>
+            <a href="#" class="port-link">View Project ›</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH STACK -->
+  <section class="tech-section">
+    <div class="reveal">
+      <div class="sec-tag" style="justify-content:center;">Tech Stack</div>
+      <h2 class="sec-title">Teknologi yang <span>Kami Gunakan</span></h2>
+      <div class="sec-div" style="justify-content:center;"><div class="sd-l"></div><div class="sd-d"></div><div class="sd-l2"></div></div>
+    </div>
+    <div class="tech-grid reveal">
+      <div class="tech-chip"><div class="chip-dot" style="background:#61DBFB"></div>React.js</div>
+      <div class="tech-chip"><div class="chip-dot" style="background:#eee"></div>Next.js</div>
+      <div class="tech-chip"><div class="chip-dot" style="background:#4FC08D"></div>Vue.js</div>
+      <div class="tech-chip"><div class="chip-dot" style="background:#FF2D20"></div>Laravel</div>
+      <div class="tech-chip"><div class="chip-dot" style="background:#339933"></div>Node.js</div>
+      <div class="tech-chip"><div class="chip-dot" style="background:#02569B"></div>Flutter</div>
+      <div class="tech-chip"><div class="chip-dot" style="background:#A97BFF"></div>Unity</div>
+      <div class="tech-chip"><div class="chip-dot" style="background:#313131"></div>Unreal</div>
+      <div class="tech-chip"><div class="chip-dot" style="background:#FF9900"></div>AWS</div>
+      <div class="tech-chip"><div class="chip-dot" style="background:#2496ED"></div>Docker</div>
+      <div class="tech-chip"><div class="chip-dot" style="background:#FFCA28"></div>Firebase</div>
+      <div class="tech-chip"><div class="chip-dot" style="background:#47A248"></div>MongoDB</div>
+      <div class="tech-chip"><div class="chip-dot" style="background:#336791"></div>PostgreSQL</div>
+      <div class="tech-chip"><div class="chip-dot" style="background:#F24E1E"></div>Figma</div>
+      <div class="tech-chip"><div class="chip-dot" style="background:#F05032"></div>Git</div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testi-section">
+    <div class="reveal">
+      <div class="sec-tag">Testimoni</div>
+      <h2 class="sec-title">Kata <span>Klien</span> Kami</h2>
+      <div class="sec-div"><div class="sd-l"></div><div class="sd-d"></div></div>
+    </div>
+    <div class="testi-grid reveal">
+      <div class="testi-card">
+        <div class="testi-top"><div class="testi-stars">★★★★★</div><div class="testi-qmark">"</div></div>
+        <p class="testi-text">Anam-Gaming benar-benar luar biasa! Platform e-sport yang mereka bangun melebihi ekspektasi. Tim sangat responsif dan profesional. Highly recommended!</p>
+        <div class="testi-author">
+          <div class="testi-ava">RH</div>
+          <div><div class="testi-name">REZA HENDRA</div><div class="testi-role">// CEO · Nexus Esport</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-top"><div class="testi-stars">★★★★★</div><div class="testi-qmark">"</div></div>
+        <p class="testi-text">Aplikasi mobile gaming kami sekarang punya 50K+ downloads berkat kerja keras tim Anam-Gaming. Kualitas kode bersih, desain keren, dan delivery tepat waktu!</p>
+        <div class="testi-author">
+          <div class="testi-ava">AS</div>
+          <div><div class="testi-name">ANISA SYAFITRI</div><div class="testi-role">// Founder · GameZone ID</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-top"><div class="testi-stars">★★★★★</div><div class="testi-qmark">"</div></div>
+        <p class="testi-text">Dashboard analytics yang mereka buat sangat membantu bisnis kami. Real-time data, UI yang intuitif, dan performa cepat. Support 24/7 nya juga top banget!</p>
+        <div class="testi-author">
+          <div class="testi-ava">BW</div>
+          <div><div class="testi-name">BUDI WAHYONO</div><div class="testi-role">// CTO · TechVenture ID</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="reveal" style="text-align:center;">
+      <div class="sec-tag" style="justify-content:center;">Harga</div>
+      <h2 class="sec-title">Paket <span>Layanan</span> Kami</h2>
+      <div class="sec-div" style="justify-content:center;"><div class="sd-l"></div><div class="sd-d"></div><div class="sd-l2"></div></div>
+    </div>
+    <div class="price-grid reveal">
+      <div class="price-card">
+        <div class="price-plan">// STARTER</div>
+        <div class="price-amount"><span class="price-cur">Rp</span><span class="price-num">5</span><span class="price-jt">jt</span></div>
+        <div class="price-period">/ project · estimasi</div>
+        <p class="price-desc">Cocok untuk UMKM &amp; startup yang baru memulai perjalanan digital.</p>
+        <div class="price-line"></div>
+        <ul class="price-features">
+          <li>Landing Page / Profil Web</li>
+          <li>Desain UI Responsif</li>
+          <li>Domain &amp; Hosting 1 Tahun</li>
+          <li>3x Revisi</li>
+          <li>Support 1 Bulan</li>
+          <li class="off">Custom Backend</li>
+          <li class="off">Mobile App</li>
+        </ul>
+        <a href="#contact" class="price-btn">Get Started</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-plan">// PRO</div>
+        <div class="price-amount"><span class="price-cur">Rp</span><span class="price-num">20</span><span class="price-jt">jt</span></div>
+        <div class="price-period">/ project · estimasi</div>
+        <p class="price-desc">Solusi lengkap untuk bisnis yang serius berkembang di dunia digital.</p>
+        <div class="price-line"></div>
+        <ul class="price-features">
+          <li>Web App Full Stack</li>
+          <li>Custom UI/UX Design</li>
+          <li>Backend + Database</li>
+          <li>REST API Integration</li>
+          <li>Admin Dashboard</li>
+          <li>Revisi Unlimited</li>
+          <li>Support 6 Bulan</li>
+        </ul>
+        <a href="#contact" class="price-btn solid">Get Started</a>
+      </div>
+      <div class="price-card">
+        <div class="price-plan">// ENTERPRISE</div>
+        <div class="price-amount"><span class="price-cur">Rp</span><span class="price-num">50</span><span class="price-jt">jt+</span></div>
+        <div class="price-period">/ project · custom</div>
+        <p class="price-desc">Paket komprehensif untuk perusahaan &amp; platform gaming skala nasional.</p>
+        <div class="price-line"></div>
+        <ul class="price-features">
+          <li>Web + Mobile App</li>
+          <li>Game Development</li>
+          <li>Cloud Infrastructure</li>
+          <li>Security Audit</li>
+          <li>Digital Marketing</li>
+          <li>Support 24/7 · 1 Tahun</li>
+          <li>Dedicated Project Manager</li>
+        </ul>
+        <a href="#contact" class="price-btn">Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="contact">
+    <div class="cta-glitch reveal" data-text="Siap Berkolaborasi?">Siap Berkolaborasi?</div>
+    <p class="cta-sub reveal">Wujudkan proyek digital impian Anda bersama <span>Anam-Gaming</span>. Konsultasi gratis, tanpa komitmen — kami siap mendengar ide Anda.</p>
+    <div class="terminal-ln reveal">Menghubungkan ke tim Anam-Gaming... Koneksi berhasil ✓</div>
+    <div class="cta-btns reveal">
+      <a href="https://wa.me/6281234567890" class="btn-glow">💬 WhatsApp Kami</a>
+      <a href="mailto:hello@anam-gaming.id" class="btn-outline">✉ Email Kami</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <span class="f-logo"><span class="fc">ANAM</span><span class="fp">-</span><span class="fw">GAMING</span></span>
+        <p class="f-desc">Studio teknologi digital yang menghadirkan solusi inovatif di bidang web, mobile, gaming, dan digital transformation untuk bisnis Anda.</p>
+        <div class="f-status"><div class="f-sdot"></div>All Systems Operational</div>
+      </div>
+      <div>
+        <div class="f-col-title">Layanan</div>
+        <ul class="f-links">
+          <li><a href="#">Web Development</a></li>
+          <li><a href="#">Mobile App</a></li>
+          <li><a href="#">Game Development</a></li>
+          <li><a href="#">UI/UX Design</a></li>
+          <li><a href="#">Digital Marketing</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="f-col-title">Perusahaan</div>
+        <ul class="f-links">
+          <li><a href="#">Tentang Kami</a></li>
+          <li><a href="#">Portfolio</a></li>
+          <li><a href="#">Blog &amp; News</a></li>
+          <li><a href="#">Karir</a></li>
+          <li><a href="#">Mitra</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="f-col-title">Kontak</div>
+        <ul class="f-links">
+          <li><a href="#">WhatsApp</a></li>
+          <li><a href="#">Email</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">LinkedIn</a></li>
+          <li><a href="#">Discord</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="f-copy">© 2026 ANAM-GAMING · ALL RIGHTS RESERVED · MADE WITH ❤ IN INDONESIA</div>
+      <div class="f-socials">
+        <a href="#" class="f-soc">IG</a>
+        <a href="#" class="f-soc">TW</a>
+        <a href="#" class="f-soc">YT</a>
+        <a href="#" class="f-soc">DC</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // CURSOR
+    const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+    (function anim(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cur2.style.left=rx+'px';cur2.style.top=ry+'px';requestAnimationFrame(anim);})();
+    document.querySelectorAll('a,button,.svc-card,.port-card,.tech-chip,.testi-card,.price-card').forEach(el=>{
+      el.addEventListener('mouseenter',()=>cur2.classList.add('big'));
+      el.addEventListener('mouseleave',()=>cur2.classList.remove('big'));
+    });
+
+    // SCROLL REVEAL
+    const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}}),{threshold:.1});
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+    // COUNTER
+    const cObs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(!e.isIntersecting)return;cObs.unobserve(e.target);
+        const el=e.target,target=+el.dataset.target,suf=el.dataset.suffix||'';
+        let curr=0;const step=target/55;
+        const t=setInterval(()=>{curr=Math.min(curr+step,target);el.textContent=Math.floor(curr)+suf;if(curr>=target)clearInterval(t);},18);
+      });
+    },{threshold:.5});
+    document.querySelectorAll('.h-stat-num').forEach(c=>cObs.observe(c));
+
+    // PARALLAX GRID
+    window.addEventListener('scroll',()=>{
+      const y=window.scrollY;
+      const g=document.querySelector('.hero-grid');
+      if(g)g.style.transform=`translateY(${y*.25}px)`;
+    });
+  </script>
 </body>
 </html>
